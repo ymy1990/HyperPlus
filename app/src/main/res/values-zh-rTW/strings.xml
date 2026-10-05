@@ -257,15 +257,6 @@
     <string name="wl_own_note">本應用程式預設不在清單裡，設定頁也歸它管（會看到旋轉按鈕）。想讓設定頁跟隨系統旋轉，就打開這一格。</string>
     <string name="uc_note">實測轉不動：本應用程式試過在%1$s上旋轉，但螢幕沒變化，所以不再控制它。</string>
 
-    <!-- ================================================ 捐贈卡 -->
-    <string name="donate_title">支持 HyperPlus</string>
-    <string name="donate_qr_desc">微信捐贈 QR Code</string>
-    <string name="donate_pitch">作者開發不易，求求賞口飯吃。</string>
-    <string name="donate_saved">已儲存到相簿（圖片 / HyperPlus）</string>
-    <string name="donate_save_failed">儲存失敗，請稍後重試</string>
-    <string name="donate_saving">正在儲存…</string>
-    <string name="donate_save_button">儲存 QR Code 到相簿</string>
-    <string name="donate_terms">關於收費：Alpha 階段將始終保持免費；不排除將來推出 Beta 或正式版後，部分功能收費的可能。</string>
 
     <!-- ================================================ 更新對話框 -->
     <string name="update_title">發現新版本</string>

@@ -260,15 +260,6 @@
     <string name="wl_own_note">本应用默认不在名单里，设置页也归它管（会看到旋转按钮）。想让设置页跟随系统旋转，就打开这一格。</string>
     <string name="uc_note">实测转不动：本应用试过在%1$s上旋转，但屏幕没变化，所以不再控制它。</string>
 
-    <!-- ================================================ 捐赠卡 -->
-    <string name="donate_title">支持 HyperPlus</string>
-    <string name="donate_qr_desc">微信捐赠二维码</string>
-    <string name="donate_pitch">作者开发不易，求求赏口饭吃。</string>
-    <string name="donate_saved">已保存到相册（图片 / HyperPlus）</string>
-    <string name="donate_save_failed">保存失败，请稍后重试</string>
-    <string name="donate_saving">正在保存…</string>
-    <string name="donate_save_button">保存二维码到相册</string>
-    <string name="donate_terms">关于收费：Alpha 阶段将始终保持免费；不排除将来推出 Beta 或正式版后，部分功能收费的可能。</string>
 
     <!-- ================================================ 更新弹窗 -->
     <string name="update_title">发现新版本</string>

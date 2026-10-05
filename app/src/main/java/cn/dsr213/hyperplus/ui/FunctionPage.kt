@@ -40,8 +40,6 @@ internal fun FunctionPage(
     ) { padding ->
         HomeColumn(padding) {
 
-            DonateCard()
-
             SectionCard {
                 ArrowPreference(
                     title = engineHeadline(ctx, probed, hosted, hostState),

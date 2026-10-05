@@ -280,15 +280,6 @@
     <string name="wl_own_note">This app isn\'t on the list by default, so its own settings page is managed too (you\'ll see the rotate button). Turn this on to let the settings page follow the system.</string>
     <string name="uc_note">Measured as unrotatable: this app tried to rotate on the %1$s but the screen didn\'t change, so it no longer controls it.</string>
 
-    <!-- ================================================ 捐赠卡 -->
-    <string name="donate_title">Support HyperPlus</string>
-    <string name="donate_qr_desc">WeChat donation QR code</string>
-    <string name="donate_pitch">Making this app is hard work — please buy me a meal.</string>
-    <string name="donate_saved">Saved to gallery (Pictures / HyperPlus)</string>
-    <string name="donate_save_failed">Save failed, please try again later</string>
-    <string name="donate_saving">Saving…</string>
-    <string name="donate_save_button">Save QR code to gallery</string>
-    <string name="donate_terms">On pricing: it will stay free throughout the Alpha stage; charging for some features after a Beta or stable release isn\'t ruled out.</string>
 
     <!-- ================================================ 更新弹窗 -->
     <string name="update_title">New version available</string>

@@ -112,8 +112,6 @@ internal fun SettingsPage(
                 )
                 ArrowPreference(
                     title = stringResource(R.string.settings_about_title),
-                    // ⚠️ 摘要里**不再提「捐赠支持」**（2026-10-01）：捐赠已搬到首页置顶，
-                    //   关于页里没有它了，摘要再写着会把用户引到一个空页面上。
                     summary = stringResource(R.string.settings_about_summary),
                     onClick = { onOpen(Route.About) },
                 )
