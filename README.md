@@ -22,7 +22,6 @@
 它解决的是这一件事，也只解决这一件事。除此之外不碰系统任何其它行为。
 
 ### 它能做什么
-
 | 能力 | 说明 | 状态 |
 |---|---|---|
 | **人脸方向跟随旋转** | 前置摄像头看一眼你脸朝哪，屏幕就朝哪 | ✅ 真机实测（需先在「实验功能」里打开开关） |
@@ -34,7 +33,6 @@
 | **应用名单** | 名单里的应用（游戏、长视频）不弹按钮、不改方向 | ✅ 真机实测 |
 | **控制中心快捷开关** | 三档循环切换，不用打开 App | ✅ 真机实测 |
 | **内屏 / 外屏分别设置** | 折叠屏两块屏的模式互不影响 | ✅ 真机实测 |
-| **方向** | 展开后内屏保持的方向，四选一（按摄像头位置选，需要 root）；引擎另按重力自动纠正 | 🔎 已实现，**需要 root** |
 | **界面多语言** | 简体中文 / 繁体中文 / English，跟随系统或手动指定 | 🔎 已实现 |
 | **更新提醒** | 启动时检查 GitHub Release 是否有新版本 | 🔎 已实现 |
 
@@ -44,7 +42,6 @@
 ### 安装
 
 **门槛（写在最前面，免得白装）：需要 root ＋ LSPosed。**
-
 | 需要什么 | 你会得到什么 |
 |---|---|
 | 装 APK ＋ root ＋ LSPosed；模块作用域勾选 **`com.android.systemui`**（只勾这一项） | 引擎常驻在**系统界面进程**里，**回桌面、锁屏、App 被强杀都继续生效** |
@@ -66,11 +63,7 @@
 半自动模式的悬浮按钮同理（系统界面是 system uid，不需要「显示在其他应用上层」）。
 装好后无需授予任何权限即可使用。
 
-> ⚠️ **唯一的例外是「默认方向」**：折叠屏的展开方向由系统的一个私有槽位决定，读它、写它
-> 都需要 root。不用这个功能就完全不需要 root，界面里带 root 字样的按钮也不去点它即可。
-
 #### 装机前检查（先对一遍，免得白折腾）
-
 | 需要 | 具体 |
 |---|---|
 | root | 任意（KernelSU / Magisk …） |
@@ -80,12 +73,11 @@
 | 摄像头 | **必须有前置摄像头**（清单里声明为必需硬件） |
 | 空间 | APK 约 40 MB，装机后还会解出约 8.6 MB 原生库 |
 
-> 除此之外**没有别的依赖**：不下载模型（人脸模型打在 APK 里）、不需要 GMS、也不需要 HyperOS
-> （只有「默认方向」那一项用到系统私有键，非 HyperOS 上它读不到值、界面会如实说明）。
+> 除此之外**没有别的依赖**：不下载模型（人脸模型打在 APK 里）、不需要 GMS、也不需要 HyperOS。
 
 #### 装完出问题了怎么办
 
-> **先排除一个误会：拒绝 root 权限不会导致崩溃。** 整个应用里只有「默认方向」这张卡会用到 root，
+：拒绝 root 权限不会导致崩溃。** 整个应用里只有「默认方向」这张卡会用到 root，
 > 而且只在你点它的那一刻才会弹授权框。拒绝授权（或这台机器上根本没有 `su`）的唯一后果，是那一项
 > 改不了 —— 界面会直接告诉你失败，不会崩。**模块本身（跑在系统界面进程里的那部分）一行 root
 > 代码都没有。** 所以如果崩溃是"装完什么都没干就发生了"，root 一定不是原因。
@@ -116,7 +108,6 @@ adb shell ls -l /data/tombstones/            # 这里有文件 = native 崩溃�
 它本来也不是故障；如果你看到它，说明装的是 0.5.0 或更早的版本，升级即可。
 
 ### 三种模式，内屏 / 外屏各存一份
-
 | 档位 | 判据 | 开摄像头？ | 谁拍板 |
 |---|---|---|---|
 | **跟随系统** | 系统自己的重力传感器 | ❌ | 系统 |
@@ -129,7 +120,6 @@ adb shell ls -l /data/tombstones/            # 这里有文件 = native 崩溃�
 
 **内屏和外屏的模式是两份、互不影响**（折叠屏用得到：合上只用外屏时常是扫码看通知，设成半自动更省电；
 展开用内屏时仍要自动转）。区别只看**当前显示的最小宽度**：
-
 | | 像素 | 换算（密度 440dpi = 2.75x） | 判定 |
 |---|---|---|---|
 | 内屏 | 1672 × 2364 | **608dp** | ≥ 512dp ⇒ 内屏 |
@@ -157,7 +147,6 @@ adb shell ls -l /data/tombstones/            # 这里有文件 = native 崩溃�
 #### 配置是怎么下发到常驻引擎的（不需要 root）
 
 两条方向分开走，一句话概括：**「用户能编辑的」走 App 自己的配置文件，「引擎自己算的账」走系统设置库。**
-
 | 数据 | 方向 | 走哪 | 要 root 吗 |
 |---|---|---|---|
 | 模式 / 策略 / 门控开关 | App → 引擎 | App 的 prefs（LSPosed 的 `XSharedPreferences` 通道） | ❌ |
@@ -226,8 +215,6 @@ app/src/main/java/cn/dsr213/hyperplus/
     ├── AboutPage.kt           关于
     ├── DonateCard.kt          捐赠卡片
     ├── LiquidGlassBar.kt      液态玻璃悬浮底栏
-    ├── DirectionSection.kt    「方向」卡（展开后方向，四选一）
-    ├── PhoneGlyph.kt          方向卡里的手机小图形
     ├── UpdateDialog.kt        更新提示
     └── FaceRotateTheme.kt     主题
 ```
@@ -237,10 +224,9 @@ app/src/main/java/cn/dsr213/hyperplus/
 
 ### 测试环境
 
-**本项目的所有结论都来自下面这一台设备。** 换机型请在「方向」卡里核对展开方向。
+**本项目的所有结论都来自下面这一台设备。** 展开后的方向由系统默认行为决定，模块不提供固定展开方向的设置。
 
 **设备（实测）**
-
 | 项 | 值 |
 |---|---|
 | 机型 | Xiaomi 2608BPX34C（代号 `lhasa`，折叠屏） |
@@ -254,7 +240,6 @@ app/src/main/java/cn/dsr213/hyperplus/
 > 机型与 ABI 在 2026-10-03 复核过；其余字段实测于 2026-09-28。
 
 **运行环境（实测）**
-
 | 项 | 值 |
 |---|---|
 | root | KernelSU（**late-load 临时 root**，重启即失效） |
@@ -262,7 +247,6 @@ app/src/main/java/cn/dsr213/hyperplus/
 | 模块作用域 | `com.android.systemui`（**只勾这一项**；HyperPlus 自己不显示、也不用勾） |
 
 **构建工具链（工程实测）**
-
 | 项 | 版本 |
 |---|---|
 | Android Gradle Plugin | 9.4.0 |
@@ -343,7 +327,6 @@ Auto-rotate only respects **gravity**, not **your face**. HyperPlus drives scree
 That is the one problem it solves, and it touches nothing else in the system.
 
 ### What it can do
-
 | Capability | What it means | Status |
 |---|---|---|
 | **Face-driven rotation** | The front camera takes one look at where your face points; the screen follows | ✅ Verified on device (enable it under "Experimental" first) |
@@ -355,7 +338,6 @@ That is the one problem it solves, and it touches nothing else in the system.
 | **Per-app list** | Apps on the list (games, long videos) get no button and no rotation | ✅ Verified on device |
 | **Quick Settings tile** | Cycle the three modes without opening the app | ✅ Verified on device |
 | **Separate inner / outer settings** | The two panels of a foldable keep independent modes | ✅ Verified on device |
-| **Orientation** | Pick the orientation the inner screen unfolds into (one of four, requires root); the engine also self-corrects from gravity | 🔎 Implemented, **requires root** |
 | **UI localisation** | Simplified Chinese / Traditional Chinese / English, system-following or manual | 🔎 Implemented |
 | **Update check** | Checks GitHub Releases for a newer version on launch | 🔎 Implemented |
 
@@ -366,7 +348,6 @@ That is the one problem it solves, and it touches nothing else in the system.
 ### Installation
 
 **The prerequisite, stated up front so you don't install for nothing: root + LSPosed.**
-
 | Requirements | What you get |
 |---|---|
 | APK + root + LSPosed, with the module scope set to **`com.android.systemui`** (that one entry only) | The engine lives inside the **SystemUI process**: it keeps working after you return to the home screen, lock the screen, or force-stop the app |
@@ -391,12 +372,7 @@ SystemUI process already holds, and the semi-auto floating button works the same
 as the system uid, so it does not need "display over other apps"). Nothing needs to be granted after
 install.
 
-> ⚠️ **The one exception is "Default orientation"**: a foldable's unfold orientation is governed by a
-> private system slot, and both reading and writing it require root. Skip that feature and root is
-> never needed — just don't tap the buttons marked as requiring root.
-
 #### Before you install (check these first)
-
 | Requirement | Detail |
 |---|---|
 | root | any (KernelSU / Magisk …) |
@@ -407,12 +383,11 @@ install.
 | Storage | ~40 MB for the APK, plus ~8.6 MB of native libraries unpacked at install time |
 
 > Nothing else is needed: no model download (the face model ships inside the APK), no Google Play
-> Services, no HyperOS (only "Default orientation" touches a private system key; elsewhere it reads
-> nothing and the UI says so).
+> Services, no HyperOS.
 
 #### If something goes wrong after installing
 
-> **Rule out one misconception first: denying root access does not cause a crash.** In the whole app
+: denying root access does not cause a crash.** In the whole app
 > only the "Default orientation" card uses root, and only at the moment you tap it — that is when the
 > prompt appears. Refusing it (or having no `su` on the device at all) only means that one setting
 > cannot be changed: the UI tells you it failed. **The module itself — the part running inside the
@@ -445,7 +420,6 @@ adb shell ls -l /data/tombstones/            # a file here = native crash, not a
 shows `API 102`. It was never a fault; if you still see it you are on 0.5.0 or older — just upgrade.
 
 ### Three modes, stored separately for each panel
-
 | Mode | Signal | Camera? | Who decides |
 |---|---|---|---|
 | **Follow system** | The system's own gravity sensor | ❌ | The system |
@@ -461,7 +435,6 @@ this app telling you two different things (the reasoning is in the `RotateMode` 
 closed you mostly glance at notifications or scan codes, so semi-auto saves power, while the inner
 screen still wants to follow your face. The only thing that distinguishes them is the **smallest
 current width**:
-
 | | Pixels | Converted (440 dpi = 2.75×) | Verdict |
 |---|---|---|---|
 | Inner | 1672 × 2364 | **608dp** | ≥ 512dp ⇒ inner |
@@ -491,7 +464,6 @@ and centred — smaller to the eye, not smaller to your finger.
 
 The two directions travel separately. In one sentence: **what the user can edit goes through the app's
 own config file; what the engine computes for itself goes through the system settings database.**
-
 | Data | Direction | Route | Root? |
 |---|---|---|---|
 | Mode / strategy / gate switches | app → engine | the app's prefs (LSPosed `XSharedPreferences` channel) | ❌ |
@@ -562,8 +534,6 @@ app/src/main/java/cn/dsr213/hyperplus/
     ├── AboutPage.kt           About
     ├── DonateCard.kt          Donation card
     ├── LiquidGlassBar.kt      Liquid-glass floating bottom bar
-    ├── DirectionSection.kt    "Orientation" card (four choices)
-    ├── PhoneGlyph.kt          Phone glyph used by the orientation card
     ├── UpdateDialog.kt        Update prompt
     └── FaceRotateTheme.kt     Theme
 ```
@@ -574,10 +544,9 @@ app/src/main/java/cn/dsr213/hyperplus/
 ### Test environment
 
 **Every claim in this README comes from the single device below.** On a different model, confirm the
-unfold orientation on the "Orientation" card.
+system unfold behavior; the module does not set a fixed unfold orientation.
 
 **Device (measured)**
-
 | Item | Value |
 |---|---|
 | Model | Xiaomi 2608BPX34C (codename `lhasa`, foldable) |
@@ -591,7 +560,6 @@ unfold orientation on the "Orientation" card.
 > Model and ABI re-checked on 2026-10-03; the remaining fields were measured on 2026-09-28.
 
 **Runtime (measured)**
-
 | Item | Value |
 |---|---|
 | root | KernelSU (**late-load temporary root**; lost on reboot) |
@@ -599,7 +567,6 @@ unfold orientation on the "Orientation" card.
 | Module scope | `com.android.systemui` (**this one entry only**; HyperPlus itself is not listed and is not needed) |
 
 **Toolchain (measured from this project)**
-
 | Item | Version |
 |---|---|
 | Android Gradle Plugin | 9.4.0 |

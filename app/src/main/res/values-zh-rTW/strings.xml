@@ -192,11 +192,6 @@
     <string name="status_screen_rotation">目前螢幕：%1$s　方向：%2$s</string>
 
     <!-- ================================================ 方向（2026-10-04 合併：預設方向 + 校正） -->
-    <string name="direction_title">方向</string>
-    <string name="direction_default_desc">展開後，內螢幕保持這個方向。</string>
-    <string name="direction_root_note">需要 root 權限，首次點選會彈出授權請求。</string>
-    <string name="direction_unsupported">這台裝置的系統不支援方向設定。</string>
-    <string name="direction_failed">未能修改，請確認已授予 root 權限。</string>
 
     <!-- ================================================ 二級頁：旋轉增強 -->
     <string name="rotation_title">旋轉增強</string>

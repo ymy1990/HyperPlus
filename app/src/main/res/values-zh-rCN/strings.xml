@@ -195,11 +195,6 @@
     <string name="status_screen_rotation">当前屏幕：%1$s　方向：%2$s</string>
 
     <!-- ================================================ 方向（2026-10-04 合并：默认方向 + 校准） -->
-    <string name="direction_title">方向</string>
-    <string name="direction_default_desc">展开后，内屏保持这个方向。</string>
-    <string name="direction_root_note">需要 root 权限，首次点选会弹出授权请求。</string>
-    <string name="direction_unsupported">这台设备的系统不支持方向设置。</string>
-    <string name="direction_failed">未能修改，请确认已授予 root 权限。</string>
 
     <!-- ================================================ 二级页：旋转增强 -->
     <string name="rotation_title">旋转增强</string>

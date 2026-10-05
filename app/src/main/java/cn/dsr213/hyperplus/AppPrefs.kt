@@ -1403,33 +1403,6 @@ object AppPrefs {
     }
 
     /**
-     * 读**某块屏方向槽位**的当前实际值（`Settings.System.user_rotation_<form>`）。
-     *
-     * ★ 读系统设置**不需要任何权限**（零门槛），所以 App 侧读它完全正当 ——
-     *   界面据此显示"现在到底是什么方向"，而不是"用户点过什么"。
-     *
-     * ★★ 2026-10-03：**写**这一侧改由 App 借 root 直写（[RootShell.putSystemInt]；
-     *   用户原话「**能装上模块的手机一定有 Root，可以通过获取 root 来修改**」）。
-     *   ⚠️ 这里曾经写着"写必须由引擎做、别引入 su" —— 那条**已被真机否掉**：
-     *     引擎代写要过配置通道，实测出现过"请求落了盘、槽位却没变"（见当日文档）。
-     *     现在写就在 `ui.DirectionSection` 里，点一下一条命令，成败当场可见。
-     *   ⚠️ 别把写挪到这条路径上来：读是**每秒轮询**的，绝不能夹带写。
-     *
-     * @return `null` = 读不到 / 这个键不存在（⚠️ 非 HyperOS 机型就是"键根本没有"，
-     *   调用方**不得**当成 0 —— "没有这个键"与"键值是 0"是两件事）；也不返回越界值
-     */
-    fun readSlot(form: ScreenForm): Int? {
-        val cr = ctx?.contentResolver ?: return null
-        return runCatching {
-            Settings.System.getInt(
-                cr,
-                PrefsBridge.KEY_USER_ROTATION_PREFIX + form.storageKey,
-                Int.MIN_VALUE,
-            )
-        }.getOrNull()?.takeIf { it in 0..3 }
-    }
-
-    /**
      * 供 QS Tile 单击使用：**三态循环** 跟随系统 → 自适应 → 半自动 → 跟随系统。
      *
      * ⚠️ 外屏**不增强**（见 [modeOf]）⇒ 在外屏上"切换"没有可切换的东西。这里**直接返回

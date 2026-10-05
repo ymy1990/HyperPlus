@@ -215,11 +215,6 @@
     <string name="status_screen_rotation">Screen: %1$s · Orientation: %2$s</string>
 
     <!-- ================================================ Orientation (2026-10-04: default + calibration merged) -->
-    <string name="direction_title">Orientation</string>
-    <string name="direction_default_desc">After unfolding, the inner screen keeps this orientation.</string>
-    <string name="direction_root_note">Needs root; the first tap will show a permission prompt.</string>
-    <string name="direction_unsupported">This device\'s system doesn\'t support orientation settings.</string>
-    <string name="direction_failed">Couldn\'t change it — make sure root access was granted.</string>
 
     <!-- ================================================ 二级页：旋转增强 -->
     <string name="rotation_title">Rotation enhancements</string>

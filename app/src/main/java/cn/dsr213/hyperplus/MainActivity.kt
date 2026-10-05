@@ -140,7 +140,7 @@ class MainActivity : ComponentActivity() {
     //   而引擎里 `AdaptiveEngine.noteSignEvidence`（2314 行被调用）本来就在拿**重力扇区**
     //   持续校验符号位 —— 等于重力记一票、等于镜像记一票，攒够 `SIGN_MIN_SAMPLES = 20`
     //   且反号证据 ≥ 3 倍就自动翻转 `sign` 并落盘。⇒ 手动入口是多余的，删掉不损失能力。
-    // ⛔ 别把它加回来；完整理由见 `ui/DirectionSection` 的类注释。
+    // ⛔ 别把它加回来；方向校准已移除，由引擎根据重力证据自动处理。
     //
     // ⚠️ 保留未删的：`AppPrefs.persistCalibration` / `refreshCalibFromSettings` ——
     //   它们服务的是**自动**那条路（引擎自己写、界面自己读），仍然是活的。

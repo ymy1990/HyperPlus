@@ -70,7 +70,7 @@ internal object RootShell {
     /**
      * 读一个 `Settings.System` 的整型键（借 root）。
      *
-     * ⚠️ 普通读设置**本来不需要 root**（见 [AppPrefs.readSlot]）—— 这个方法是给
+     * ⚠️ 普通读设置**本来不需要 root**—— 这个方法是给
      *   "需要跟写入同一视角核对"的场合用的备用手段，别拿它做每秒轮询。
      *
      * @return 读不到 / 不是整数 ⇒ null

@@ -284,27 +284,7 @@ internal object PrefsBridge {
      */
     val MIRROR = PREFIX + "config_mirror"
 
-    /**
-     * ★★★ **HyperOS「每块屏各自的方向槽位」键前缀**（不是我们的键，是 WMS 的）。
-     *
-     * 完整键 = 前缀 + [ScreenForm.storageKey] ⇒ `user_rotation_inner` / `user_rotation_outer`。
-     * ⚠️ **AOSP 标准里只有全局的 `user_rotation`**，这两个是 HyperOS 私有扩展 ——
-     *   非 HyperOS 机型上**根本不存在**（[AppPrefs.readSlot] 会返回 null，界面据此
-     *   说"这台设备的系统不支持方向设置"，**不会**凭空造一个没人读的垃圾键）。
-     *
-     * ★ 它为什么重要：**框架展开 / 折叠时灌进屏幕的就是它**（实测与 WMS 的
-     *   `mUserRotationInner` / `mUserRotationOuter` 一一对应）。槽位对 ⇒ 展开即正立、
-     *   我们一行都不用写；槽位错 ⇒ 用户看到的那个"自己转一下"。
-     *
-     * ★★ 2026-10-03 起 **写它的人变了**：以前是引擎（SystemUI 特权包）代写，
-     *   现在改由 **App 借 root 直写**（[cn.dsr213.hyperplus.RootShell]；用户原话
-     *   「**能装上模块的手机一定有 Root，可以通过获取 root 来修改**」）。
-     *   原因：引擎代写要过配置通道，真机上出现过"请求落了盘、槽位却没变"。
-     *   ⚠️ **读**它不需要任何权限（普通应用也能读），App 侧据此显示真实当前值；
-     *     写要 root，**且只在用户点「默认方向」时写** —— ⛔ 别在任何自动路径里写它。
-     *
-     * ★ 单一真值：引擎侧那个同名常量直接引用这一条，别在两处各写一份字符串。
-     */
+    /** HyperOS 的每屏方向记忆键，仅供诊断读取；展开方向由系统决定。 */
     const val KEY_USER_ROTATION_PREFIX = "user_rotation_"
 
     // ---------------------------------------------------------------- 状态键（完整名，引擎 → App）
