@@ -20,7 +20,7 @@ android {
         applicationId = "cn.dsr213.hyperplus"
         minSdk = 30
         targetSdk = 35
-        versionCode = 8
+        versionCode = 9
         // ★ Alpha 阶段统一带 -Alpha 后缀。VersionChecker 会解析这个字符串
         //   去和 GitHub Release 的 tag_name 比较（见 VersionChecker.parse）
         //
@@ -42,8 +42,9 @@ android {
         //        模块元数据 / 入口 / hook 层整体换血，摘掉"使用了已废弃功能"的横幅
         //        ＋「方向」卡重做（删手动校准与实时角度盘）+ 提示口径修订
         // 0.7.0：移除固定展开方向设置，已发布于 fork
-        // 0.8.0：开发中，尚未发布
-        versionName = "0.8.0-Alpha"
+        // 0.8.0：按钮旋转版，移除自适应并修正接管方向，已发布于 fork
+        // 0.9.0：开发中，尚未发布
+        versionName = "0.9.0-Alpha"
 
     }
 
