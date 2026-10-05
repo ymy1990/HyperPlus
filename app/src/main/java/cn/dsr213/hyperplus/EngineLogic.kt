@@ -157,23 +157,3 @@ internal fun isHalfTurn(a: Int, b: Int): Boolean =
  */
 internal fun shouldRunClear(primed: Boolean, seen: String, req: String): Boolean =
     primed && req.isNotEmpty() && req != seen
-
-/**
- * 前摄候选顺序：**上次成功过的 id 排第一**，其余按 id 升序。
- *
- * 抽成纯函数是为了能单测 —— 这里有两个必须成立的性质：
- *  ① 偏好 id 必须是列表**第一个**（否则它就没起"优先用"的作用，白持久化）；
- *  ② 结果必须**包含每个前摄恰好一次**（多一个 = 白白多烧一轮失败的 1.5s 超时，
- *     少一个 = 少一条退路）。
- *
- * ⚠️ 偏好 id 不在当前前摄列表里（换机型 / 系统更新后 id 变了）时**静默忽略**，
- *   退回纯 id 升序 —— 绝不能让一个过期的 id 卡在队首反复失败。
- */
-internal fun orderFrontIds(fronts: List<String>, preferred: String): List<String> {
-    val sorted = fronts.sorted()
-    return if (preferred.isNotEmpty() && preferred in sorted) {
-        listOf(preferred) + sorted.filter { it != preferred }
-    } else {
-        sorted
-    }
-}

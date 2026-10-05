@@ -51,7 +51,6 @@
         android:protectionLevel="signature" />
     <uses-permission android:name="cn.dsr213.hyperplus.permission.CONFIG_PUSH" />
 
-    <uses-permission android:name="android.permission.CAMERA" />
     <!--
       ★ 半自动悬浮按钮提层级用（2026-09-28 用户点名「悬浮窗层级太低，旋转 180° 后被状态栏遮挡」）。
 
@@ -117,8 +116,6 @@
         ⛔ 别再把"完全不需要 root"写进任何面向用户的文案（`AboutPage` 里那句也已按此修正）。
     -->
 
-    <uses-feature android:name="android.hardware.camera.front" android:required="true" />
-
     <!--
       ★★ 这是一个 LSPosed 模块（同时仍是普通 App）。
          设计要点：**同一个 APK 两种身份**
@@ -174,7 +171,6 @@
 
           ⇒ 背景 / 证据 / 取舍见 docs/API102迁移_2026-10-03.md
         -->
-
 
         <!-- ⚠️ 刻意**不**声明 screenOrientation：
              用 fullSensor 会让 display.rotation 跟随传感器，从而**掩盖掉系统自动旋转设置的作用**，

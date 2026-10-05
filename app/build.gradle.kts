@@ -45,21 +45,6 @@ android {
         // 0.8.0：开发中，尚未发布
         versionName = "0.8.0-Alpha"
 
-        // ★ 只打 **arm64-v8a 一套**原生库（2026-10-03 加）。
-        //
-        //   实测：APK 里 4 套 ABI 的 so 合计 31.6MB，而本机（以及 2021 年之后
-        //   绝大多数手机）只会加载 arm64-v8a 那一套（8.1MB）——
-        //   另外三套（x86 / x86_64 / armeabi-v7a，约 23.5MB）**永远不会被加载**。
-        //   ⇒ APK 从 60MB 降到约 37MB，功能一个都不少。
-        //
-        //   ⚠️ 代价：装不进**纯 32 位**设备（Android 11+ 的纯 32 位机型已经很少见；
-        //     真要支持，把 armeabi-v7a 加回来即可，一行）。
-        //   ⚠️ 这件事与 `packaging.jniLibs.useLegacyPackaging` **不是一回事**，别混：
-        //     那个管"so 解不解包到 nativeLibraryDir"（LSPosed 注入侧要按绝对路径
-        //     `System.load`，所以那边必须是 true）；这里管"打进 APK 的是哪几套 ABI"。
-        ndk {
-            abiFilters += "arm64-v8a"
-        }
     }
 
     buildTypes {
@@ -87,19 +72,6 @@ android {
         viewBinding = false
         // ★ 版本检测要读 BuildConfig.VERSION_NAME
         buildConfig = true
-    }
-
-    packaging {
-        jniLibs {
-            // ★★ 必须让 so **真正解包**到 nativeLibraryDir。
-            //   原因（探针实测，非推断）：本 App 同时是一个 LSPosed 模块，
-            //   注入 SystemUI 后要在**别的进程**里加载 ML Kit 的 native 库。
-            //   AGP 默认 useLegacyPackaging=false（lib 以未压缩形式留在 APK 内），
-            //   那样 nativeLibraryDir 是**空目录**，注入侧只能靠 ClassLoader 去找 —— 
-            //   而"解包后用绝对路径 System.load()"这条路已被探针实测证过（3 个 so 全部 OK）。
-            //   代价：装机时多解出约 40MB（4 个 ABI × 4 个 so），仅占 /data。
-            useLegacyPackaging = true
-        }
     }
 
     testOptions {
@@ -151,15 +123,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
     implementation("androidx.lifecycle:lifecycle-service:2.8.7")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
-
-    // CameraX：只取前摄低分辨率分析流
-    val camerax = "1.4.1"
-    implementation("androidx.camera:camera-core:$camerax")
-    implementation("androidx.camera:camera-camera2:$camerax")
-    implementation("androidx.camera:camera-lifecycle:$camerax")
-
-    // ML Kit 人脸检测：bundled 版，模型打进 APK，不依赖 GMS
-    implementation("com.google.mlkit:face-detection:16.1.7")
 
     // ---------- Compose ----------
     implementation("androidx.activity:activity-compose:1.12.4")

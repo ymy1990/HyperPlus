@@ -21,7 +21,7 @@
         ⛔ 不写安装步骤（那种话属于界面里的引导）。
     -->
     <string name="module_description">Senses how the device is held and keeps the screen turned the way you want. Needs LSPosed, with “System UI” in its scope.</string>
-    <string name="tile_label">Adaptive rotation</string>
+    <string name="tile_label">Button rotation</string>
 
     <!-- ================================================ 语言选择器 -->
     <!--
@@ -81,7 +81,6 @@
     <!-- ================================================ 主页：功能 -->
     <string name="function_title">Features</string>
     <string name="function_section_rotation">Rotation</string>
-    <string name="function_section_experimental">Experimental</string>
     <string name="function_rotation_title">Rotation enhancements</string>
     <string name="function_rotation_summary">Inner screen: %1$s; the outer screen is handled by the system (Mode / Floating button / Orientation / App list)</string>    <string name="function_state_probing">Reading status…</string>
     <string name="function_state_noservice">Can\'t reach the rotation service</string>
@@ -96,12 +95,6 @@
 
     <!-- ================================================ 实验功能（2026-10-03） -->
     <!-- ⚠️ experimental_warning 是**用户给的原话**（中文那两套逐字照抄），别"优化"措辞 -->
-    <string name="function_experimental_summary">Still being tested; hidden from Rotation enhancements by default</string>
-    <string name="experimental_title">Experimental features</string>
-    <string name="experimental_warning">The features below are still experimental and may be extremely unstable. Use them with caution.</string>
-    <string name="experimental_adaptive_title">Adaptive rotation</string>
-    <string name="experimental_adaptive_summary">Once on, select it in Rotation enhancements, under Mode</string>
-    <string name="experimental_adaptive_note">Turning it off only hides the option from Mode; it won\'t change the mode you are currently using.</string>
 
     <string name="open_settings_failed">Can\'t open system settings: %1$s</string>
 
@@ -122,33 +115,16 @@
 
     <!-- ================================================ 模式名与说明 -->
     <string name="mode_label_system">Follow system</string>
-    <string name="mode_label_adaptive">Adaptive rotation (face)</string>
     <string name="mode_label_semi">Semi-auto rotation (tap to confirm)</string>
     <!-- 短名：给放不下长文案的地方（控制中心磁贴的副标题） -->
     <string name="mode_short_system">Follow system</string>
-    <string name="mode_short_adaptive">Face</string>
     <string name="mode_short_semi">Semi-auto</string>
     <string name="mode_summary_system">No interference: fully follows the system\'s “Auto-rotate” setting</string>
-    <string name="mode_summary_adaptive">Uses the front camera to read which way your face is, then rotates the screen</string>
-    <string name="mode_summary_semi">A button pops up in the bottom-right when you turn the phone; tap it to rotate. No camera, lowest battery use</string>
+    <string name="mode_summary_semi">A button appears when you turn the phone; tap it to rotate the screen</string>
 
     <!-- ================================================ 采集策略 -->
-    <string name="strategy_label_power">Battery saver first</string>
-    <string name="strategy_label_responsive">Responsiveness first</string>
-    <string name="strategy_summary_power">Turns the camera off when done; each detection has a short start-up wait</string>
-    <string name="strategy_summary_responsive">Camera stays on; responds faster but uses more battery</string>
 
     <!-- ================================================ 识别 / 校验 -->
-    <string name="vote_none">No detection result this round</string>
-    <string name="vote_no_consensus">This round: %1$s (no agreement)</string>
-    <string name="vote_winner">This round: %1$s → mostly “%2$s” (%3$d samples)</string>
-    <string name="vote_few">This round: %1$s → too few samples (%2$d in total), keeping the previous result</string>
-
-    <string name="sign_unknown">Can\'t verify right now (no reference while the phone lies flat; it recovers once you pick it up)</string>
-    <string name="sign_ok">✅ Verified (matched the phone\'s position %1$d times)</string>
-    <string name="sign_accum">Collecting samples (current reference: %1$s)</string>
-    <string name="sign_flip">⚠️ Orientation may be inverted (%1$d mismatches / %2$d matches) — it will self-correct once there are enough samples</string>
-    <string name="sign_checking">Checking: %1$d matches / %2$d mismatches (confirmed once matches are in the majority)</string>
 
     <!-- ================================================ 时长 -->
     <string name="dur_sec">%1$d s</string>
@@ -196,11 +172,8 @@
     <string name="ro_phase">Runtime: %1$s</string>
     <string name="ro_mode">Current mode: %1$s</string>
     <string name="ro_takeover">Orientation control: %1$s</string>
-    <string name="ro_takeover_active">Controlling (rotating the screen by face detection)</string>
+    <string name="ro_takeover_active">Controlling (tap the button to rotate)</string>
     <string name="ro_rotation">Current orientation: %1$s</string>
-    <string name="ro_sign">Orientation reference: %1$s</string>
-    <string name="ro_vote">This round: %1$s</string>
-    <string name="ro_conflict">Front camera taken over: %1$d times (grabbed by another app during detection)</string>
     <string name="ro_display">System orientation: %1$s</string>
     <string name="ro_uptime">Uptime: %1$s</string>
     <string name="ro_heartbeat">Service response: %1$d s ago (%2$s)</string>
@@ -233,13 +206,9 @@
     <string name="rotation_hint_title">Button wait time</string>
     <string name="rotation_hint_summary">After you turn the phone you have %1$d seconds to tap it; it disappears on timeout (semi-auto only)</string>
     <string name="rotation_hint_value">%1$d s</string>
-    <string name="rotation_notice_title">Usage note</string>
-    <string name="rotation_notice_body">“Attention detection / Smart scanning” holds the front camera, so the orientation occasionally lags — consider turning it off: Settings → Lock screen → Attention detection.\n\nYou don\'t need to keep this app open, and it needs no autostart or battery whitelist — swiping it away or clearing it from Recents changes nothing.</string>
-    <string name="rotation_notice_button">Open system settings</string>
     <string name="rotation_preview_title">Preview the rotate button</string>
     <string name="rotation_preview_body">The button only appears when the phone\'s orientation differs from the screen\'s. Tapping here makes it pop up once right away (same place as usual, bottom-right); if nothing happens, check the Diagnostics page.</string>
     <string name="rotation_preview_button">Show me the button once</string>
-
 
     <!-- ================================================ 二级页：诊断 -->
     <string name="diag_title">Diagnostics</string>
@@ -255,9 +224,6 @@
     <string name="diag_cfg_unknown">Unknown (not present in this state report)</string>
     <string name="diag_cfg_ok">Ready (the rotation service can read your settings)</string>
     <string name="diag_cfg_no_reason">no reason reported</string>
-    <string name="diag_kv_camera">Front camera id</string>
-    <string name="diag_camera_none">— (not ready)</string>
-    <string name="diag_camera_ok">%1$s (several are available on this device; it switches automatically)</string>
     <string name="diag_kv_gate">App list control</string>
     <string name="diag_gate_unreadable">Can\'t read the current app → list control is inactive (everything runs as usual)</string>
     <string name="diag_gate_gated_rotate">Handed off: %1$s%2$s, system auto-rotate restored</string>
@@ -268,9 +234,6 @@
     <string name="diag_fg_orientation">%1$s (diagnostics only, not used in decisions)</string>
     <string name="diag_kv_whitelist">Effective app list</string>
     <string name="diag_whitelist_value">%1$d entries (includes not-installed defaults, so more than the toggles you see)</string>
-    <string name="diag_kv_conflict">Camera taken over</string>
-    <string name="diag_conflict_none">0 times (never taken over)</string>
-    <string name="diag_conflict_some">%1$d times (the front camera was held by another app, so those rounds detected nothing)</string>
     <string name="diag_kv_uptime">Uptime</string>
     <string name="diag_kv_heartbeat">Service response</string>
     <string name="diag_heartbeat_ok">%1$d s ago · normal</string>
@@ -286,10 +249,6 @@
     <string name="diag_open_ms_value">%1$d ms (start to first frame)</string>
     <string name="diag_kv_sign">Orientation reference</string>
     <string name="diag_kv_display">System orientation</string>
-    <string name="diag_kv_calib">Calibration</string>
-    <string name="diag_calib_done_confirmed">angle offset %1$s° (orientation reference verified)</string>
-    <string name="diag_calib_done_unconfirmed">angle offset %1$s° (orientation reference not verified yet)</string>
-    <string name="diag_calib_none">Not calibrated yet</string>
     <string name="diag_section_trigger">Triggering &amp; hand-off</string>
     <string name="diag_section_metrics">Detection metrics</string>
     <string name="diag_section_log">Data log</string>

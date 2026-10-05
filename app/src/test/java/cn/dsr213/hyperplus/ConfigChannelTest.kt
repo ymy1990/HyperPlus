@@ -170,14 +170,10 @@ class ConfigChannelTest {
     @Test
     fun realisticSnapshotRoundTrips() {
         val src: Map<String, Any?> = linkedMapOf(
-            PrefsBridge.MODE_INNER to "ADAPTIVE",
-            PrefsBridge.STRATEGY to "POWER_SAVING",
+            PrefsBridge.MODE_INNER to "SEMI",
             PrefsBridge.HANDOFF_ROTATE to true,
             PrefsBridge.GATE to true,
-            PrefsBridge.EXPERIMENTAL_ADAPTIVE to false,
             PrefsBridge.HINT_MS to 3000,
-            PrefsBridge.ANGLE_PREVIEW to false,
-            PrefsBridge.CALIB_REQ to "1791002314254|1",
             PrefsBridge.UNCONTROLLABLE_CLEAR to "1791002314254",
             PrefsBridge.BREAKER_RESET to "1791002314254",
             PrefsBridge.WHITELIST_ADD to "com.tencent.mm\ncom.tencent.mobileqq",

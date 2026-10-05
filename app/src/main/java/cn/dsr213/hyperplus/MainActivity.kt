@@ -128,7 +128,7 @@ class MainActivity : ComponentActivity() {
         hosted = st?.hostAlive == true
         probed = true
         // 标定值住在 Settings（引擎的账），顺便刷一次，让界面跟上引擎的自动修正
-        AppPrefs.refreshCalibFromSettings()
+
     }
 
     // ================================================================ 标定（2026-10-04 起：引擎全自动）

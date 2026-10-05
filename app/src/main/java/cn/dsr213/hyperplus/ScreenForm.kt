@@ -283,7 +283,7 @@ internal object ActiveDisplay {
     /** 指定形态对应的那块 `Display`。认不出返回 null */
     fun forForm(context: Context, form: ScreenForm): Display? = runCatching {
         val dm = context.getSystemService(DisplayManager::class.java) ?: return null
-        dm.displays.firstOrNull { formOf(it) == form }
+        dm.displays.firstOrNull { it.state == Display.STATE_ON && formOf(it) == form }
     }.getOrNull()
 
     /**

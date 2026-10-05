@@ -25,7 +25,7 @@ import java.net.URL
 object VersionChecker {
 
     /** 本项目的 GitHub 仓库（owner/repo） */
-    const val REPO = "213DEE/HyperPlus"
+    const val REPO = "ymy1990/HyperPlus"
 
     private const val API_LATEST = "https://api.github.com/repos/$REPO/releases/latest"
     private const val TAG = "FaceRotate"

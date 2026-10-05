@@ -241,67 +241,6 @@ object ModuleLink {
     /** 宿主的心跳周期（秒）。改宿主的 `HEARTBEAT_PERIOD_MS` 时要一起改这里。 */
     const val HOST_HEARTBEAT_PERIOD_MS = 5_000L
 
-    /** 等标定结果时的轮询间隔。标定本身要采约 2.6 秒样本，120ms 的粒度足够了 */
-    private const val POLL_INTERVAL_MS = 120L
-
-    // ================================================================ 标定请求
-
-    /** 请求结果 */
-    enum class CalibStatus { OK, NO_FACE, BAD_ANGLE, UNAVAILABLE, TIMEOUT }
-
-    /**
-     * 【**不要在主线程调用**】让宿主的引擎采一次标定样本并应用。
-     *
-     * ★ 为什么标定必须由宿主做：采样要真的开相机，而**相机在宿主手里** ——
-     *   改造后 App 侧连引擎都没有了，更没有相机权限。
-     *
-     * 完整链路（两端都不需要 root）：
-     *   ① 写 App 自己的 prefs：`calib_req = "<token>|<step>"`；
-     *   ② 宿主感知到变化（文件监控 + 2 秒兜底轮询，见 `ModulePrefs`）→ 采样
-     *      → 把 `"<token>|<step>|<status>"` 写进 Settings；
-     *   ③ 这里轮询**读**回来（读系统设置零门槛）。
-     *
-     * ★ token 是这次请求的唯一标识：结果里只有 step 的话，用户连点两次同一个按钮就会
-     *   读到上一次的旧结果。有了 token 才能严格配对 —— 也正因如此，**不需要**像旧实现那样
-     *   先把总线上的旧结果"清成 pending"（那需要 App 写 Settings，正是要摘掉的 root 依赖）。
-     *
-     * ⚠️ 超时取 20 秒：链路里有一段"引擎最多 2 秒才察觉请求"的兜底轮询，
-     *   之后还要真的开一次相机采帧（本机对 SystemUI 的相机连接延迟实测可达 ~6 秒）。
-     *   按 12 秒给会把"本来就慢但会成功"的标定判成超时。
-     *
-     * @return 宿主回报的结果；超时返回 [CalibStatus.TIMEOUT]
-     */
-    fun requestCalibration(
-        ctx: Context,
-        step: Int,
-        timeoutMs: Long = 20_000L,
-    ): CalibStatus {
-        val token = System.currentTimeMillis().toString()
-        AppPrefs.requestCalibration(step, token)
-        Log.i(TAG, "标定请求已发出：token=$token step=$step")
-
-        val cr = ctx.contentResolver
-        val want = "$token|"
-        val deadline = SystemClock.elapsedRealtime() + timeoutMs
-        while (SystemClock.elapsedRealtime() < deadline) {
-            val raw = PrefsBridge.readString(cr, PrefsBridge.CALIB_RESULT)
-            if (raw != null && raw.startsWith(want)) {
-                // 格式 "<token>|<step>|<status>"
-                val status = raw.split('|').getOrNull(2)?.trim()
-                Log.i(TAG, "标定结果已回收：$raw")
-                return when (status) {
-                    "ok" -> CalibStatus.OK
-                    "noface" -> CalibStatus.NO_FACE
-                    "badangle" -> CalibStatus.BAD_ANGLE
-                    else -> CalibStatus.UNAVAILABLE
-                }
-            }
-            runCatching { Thread.sleep(POLL_INTERVAL_MS) }
-        }
-        Log.w(TAG, "标定结果超时（token=$token，等了 ${timeoutMs}ms）")
-        return CalibStatus.TIMEOUT
-    }
-
     // ================================================================ 状态读取
 
     /**

@@ -10,7 +10,7 @@
     <!-- 模組說明（2026-10-03 新增）：遷到新 API 後模組說明不再走清單 meta-data，
          改由 `<application android:description>` 引用這一條（見 AndroidManifest.xml）。 -->
     <string name="module_description">感知裝置朝向，讓畫面按你想要的方向顯示。需要 LSPosed，作用域勾「系統介面」。</string>
-    <string name="tile_label">自適應旋轉</string>
+    <string name="tile_label">按鈕旋轉</string>
 
     <!-- ================================================ 語言選擇器 -->
     <string name="lang_name_auto">跟隨系統</string>
@@ -59,7 +59,6 @@
     <!-- ================================================ 主頁：功能 -->
     <string name="function_title">功能</string>
     <string name="function_section_rotation">旋轉</string>
-    <string name="function_section_experimental">實驗</string>
     <string name="function_rotation_title">旋轉增強</string>
     <string name="function_rotation_summary">內螢幕：%1$s；外螢幕交給系統處理（模式 / 懸浮按鈕 / 方向 / 應用程式清單）</string>
     <string name="function_state_probing">正在讀取執行狀態…</string>
@@ -75,12 +74,6 @@
 
     <!-- ================================================ 實驗功能（2026-10-03） -->
     <!-- ⚠️ experimental_warning 是**使用者給的原話**（簡中逐字對譯），⛔ 不許順手改措辭 -->
-    <string name="function_experimental_summary">仍在試驗中的功能，預設不出現在旋轉增強裡</string>
-    <string name="experimental_title">實驗功能</string>
-    <string name="experimental_warning">以下功能仍處於實驗階段，效果可能極度不穩定，請謹慎使用</string>
-    <string name="experimental_adaptive_title">自適應旋轉</string>
-    <string name="experimental_adaptive_summary">開啟後，到「旋轉增強」的「模式」裡選它</string>
-    <string name="experimental_adaptive_note">關掉它只是讓這一項從「模式」裡消失，不會改動你目前正在使用的模式。</string>
 
     <string name="open_settings_failed">無法開啟系統設定：%1$s</string>
 
@@ -100,32 +93,15 @@
 
     <!-- ================================================ 模式名與說明 -->
     <string name="mode_label_system">跟隨系統</string>
-    <string name="mode_label_adaptive">自適應旋轉（人臉）</string>
     <string name="mode_label_semi">半自動旋轉（點擊確認）</string>
     <string name="mode_short_system">跟隨系統</string>
-    <string name="mode_short_adaptive">人臉</string>
     <string name="mode_short_semi">半自動</string>
     <string name="mode_summary_system">不干預：完全跟隨系統的「自動旋轉」設定</string>
-    <string name="mode_summary_adaptive">用前置相機辨識你臉的方向，自動轉螢幕</string>
-    <string name="mode_summary_semi">轉動手機時右下角彈出按鈕，點一下才轉螢幕；不用相機，最省電</string>
+    <string name="mode_summary_semi">轉動手機時彈出旋轉按鈕，點擊後才改變畫面方向</string>
 
     <!-- ================================================ 擷取策略 -->
-    <string name="strategy_label_power">省電優先</string>
-    <string name="strategy_label_responsive">反應優先</string>
-    <string name="strategy_summary_power">用完就關相機，每次辨識會有一段啟動等待</string>
-    <string name="strategy_summary_responsive">相機常駐，反應更快但更耗電</string>
 
     <!-- ================================================ 辨識 / 校驗 -->
-    <string name="vote_none">本輪還沒有辨識結果</string>
-    <string name="vote_no_consensus">本輪辨識 %1$s（沒有一致結論）</string>
-    <string name="vote_winner">本輪辨識 %1$s → 多數為「%2$s」（共 %3$d 次）</string>
-    <string name="vote_few">本輪辨識 %1$s → 樣本太少（共 %2$d 次），沿用上一次的判斷</string>
-
-    <string name="sign_unknown">暫時無法校驗（手機平放時沒有參照，拿起來會自動恢復）</string>
-    <string name="sign_ok">✅ 已校驗正確（與手機擺放方向比對 %1$d 次一致）</string>
-    <string name="sign_accum">正在累積校驗樣本（目前參照：%1$s）</string>
-    <string name="sign_flip">⚠️ 偵測到方向可能相反（%1$d 次不符 / %2$d 次相符），樣本足夠後會自動修正</string>
-    <string name="sign_checking">校驗中：%1$d 次相符 / %2$d 次不符（相符占多時確認為正確）</string>
 
     <!-- ================================================ 時長 -->
     <string name="dur_sec">%1$d 秒</string>
@@ -173,11 +149,8 @@
     <string name="ro_phase">執行狀態：%1$s</string>
     <string name="ro_mode">目前模式：%1$s</string>
     <string name="ro_takeover">螢幕方向控制：%1$s</string>
-    <string name="ro_takeover_active">正在控制（依人臉辨識的結果轉螢幕）</string>
+    <string name="ro_takeover_active">正在控制（點擊按鈕後旋轉）</string>
     <string name="ro_rotation">目前方向：%1$s</string>
-    <string name="ro_sign">方向基準：%1$s</string>
-    <string name="ro_vote">本輪辨識：%1$s</string>
-    <string name="ro_conflict">前置相機被占用：%1$d 次（辨識過程中被其他應用程式搶走）</string>
     <string name="ro_display">系統目前方向：%1$s</string>
     <string name="ro_uptime">已執行：%1$s</string>
     <string name="ro_heartbeat">服務回應：%1$d 秒前（%2$s）</string>
@@ -210,13 +183,9 @@
     <string name="rotation_hint_title">按鈕等待時間</string>
     <string name="rotation_hint_summary">轉完手機後有 %1$d 秒可以點它；逾時自動消失（僅半自動模式）</string>
     <string name="rotation_hint_value">%1$d 秒</string>
-    <string name="rotation_notice_title">使用提醒</string>
-    <string name="rotation_notice_body">「注視感知 / 智慧掃碼」會占用前置相機，方向就會偶爾跟不上 —— 建議關掉它：設定 → 鎖定螢幕 → 注視感知。\n\n本應用程式不用一直開著，也不用加自啟動或省電白名單 —— 劃掉它、清掉背景都不影響。</string>
-    <string name="rotation_notice_button">開啟系統設定</string>
     <string name="rotation_preview_title">預覽旋轉按鈕</string>
     <string name="rotation_preview_body">按鈕只在手機方向與螢幕方向不一致時出現。點它會立刻彈一次（位置和平時一樣，螢幕右下角）；沒反應就到「診斷」頁看看。</string>
     <string name="rotation_preview_button">彈一次按鈕給我看</string>
-
 
     <!-- ================================================ 二級頁：診斷 -->
     <string name="diag_title">診斷</string>
@@ -232,9 +201,6 @@
     <string name="diag_cfg_unknown">未知（本次狀態裡沒有這一項）</string>
     <string name="diag_cfg_ok">已就緒（旋轉服務讀得到設定）</string>
     <string name="diag_cfg_no_reason">原因未上報</string>
-    <string name="diag_kv_camera">前置相機編號</string>
-    <string name="diag_camera_none">—（未就緒）</string>
-    <string name="diag_camera_ok">%1$s（本機有多個可用，會自動切換）</string>
     <string name="diag_kv_gate">應用程式清單控制</string>
     <string name="diag_gate_unreadable">讀不到目前應用程式 → 清單控制未生效（一切照常運作）</string>
     <string name="diag_gate_gated_rotate">已讓位：%1$s%2$s，已恢復系統自動旋轉</string>
@@ -245,9 +211,6 @@
     <string name="diag_fg_orientation">%1$s（僅診斷用，不參與判斷）</string>
     <string name="diag_kv_whitelist">生效的應用程式清單</string>
     <string name="diag_whitelist_value">%1$d 筆（含未安裝的預設項，所以比介面上看到的勾多）</string>
-    <string name="diag_kv_conflict">相機被占用</string>
-    <string name="diag_conflict_none">0 次（沒被占用過）</string>
-    <string name="diag_conflict_some">%1$d 次（前置相機被其他應用程式占著，那幾輪沒有辨識成功）</string>
     <string name="diag_kv_uptime">已執行</string>
     <string name="diag_kv_heartbeat">服務回應</string>
     <string name="diag_heartbeat_ok">%1$d 秒前 · 正常</string>
@@ -263,10 +226,6 @@
     <string name="diag_open_ms_value">%1$d 毫秒（啟動到第一幀）</string>
     <string name="diag_kv_sign">方向基準校驗</string>
     <string name="diag_kv_display">系統目前方向</string>
-    <string name="diag_kv_calib">校正</string>
-    <string name="diag_calib_done_confirmed">角度偏移 %1$s°（方向基準已校驗）</string>
-    <string name="diag_calib_done_unconfirmed">角度偏移 %1$s°（方向基準尚未校驗）</string>
-    <string name="diag_calib_none">還沒有校正</string>
     <string name="diag_section_trigger">觸發與讓位</string>
     <string name="diag_section_metrics">辨識指標</string>
     <string name="diag_section_log">資料記錄</string>
