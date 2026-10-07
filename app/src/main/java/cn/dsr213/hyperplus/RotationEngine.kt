@@ -448,6 +448,7 @@ class RotationEngine(
     private fun confirmSemiHint(reason: String) {
 
         if (AppPrefs.mode.value != RotateMode.SEMI) return
+        if (ScreenRotationRestore.currentForm(context) != ScreenForm.INNER) return
 
         if (fgGated) return
         val now = SystemClock.elapsedRealtime()
@@ -515,6 +516,7 @@ class RotationEngine(
         semiHintAtMs = 0L
 
         if (AppPrefs.mode.value != RotateMode.SEMI) return
+        if (ScreenRotationRestore.currentForm(context) != ScreenForm.INNER) return
 
         if (fgGated) {
             runCatching { overlayRef?.hide() }
@@ -622,6 +624,8 @@ class RotationEngine(
     }
 
     private fun putPanelRotation(panel: Int): Boolean {
+        if (AppPrefs.mode.value != RotateMode.SEMI ||
+            ScreenRotationRestore.currentForm(context) != ScreenForm.INNER) return false
         val ok = runCatching {
             Settings.System.putInt(context.contentResolver, Settings.System.USER_ROTATION, panel)
         }.getOrDefault(false)
@@ -634,66 +638,41 @@ class RotationEngine(
         Settings.System.getInt(context.contentResolver, Settings.System.USER_ROTATION)
     }.getOrNull().also { if (it == null) EngineErrors.bump(EngineErrors.ROTATION_READ) }
 
-    private fun readAutoRotate(): Int = runCatching {
+    private fun readAutoRotate(): Int? = runCatching {
         Settings.System.getInt(
-            context.contentResolver, Settings.System.ACCELEROMETER_ROTATION, 1,
+            context.contentResolver, Settings.System.ACCELEROMETER_ROTATION,
         )
-    }.getOrDefault(1)
+    }.getOrNull()
 
     private fun releaseTakeover(restoreSystem: Boolean = true, quiet: Boolean = false) {
         if (!_ui.value.takeoverOn && !AppPrefs.isTakeoverActive()) return
-        if (restoreSystem) {
-            val target = AppPrefs.restoreTarget()
-            val cur = readAutoRotate()
-
-            val skipReason = when {
-                target == AppPrefs.AUTO_ROTATE_UNTOUCHED ->
-                    "这项设置本来就是我们没动过的状态，保持原样"
-                cur != 0 ->
-                    "你自己改过它（当前是开启），按你的设置保持"
-                else -> null
-            }
-            if (skipReason == null) {
-                runCatching {
-                    Settings.System.putInt(
-                        context.contentResolver, Settings.System.ACCELEROMETER_ROTATION, target,
-                    )
-                }
-
-                if (!quiet) {
-                    event(
-                        "已交还系统自动旋转（恢复为接管前的样子：" +
-                            if (target == 0) "锁定" else "自动旋转开启" + "）",
-                    )
-                }
-            } else if (!quiet) {
-                event("已交还系统自动旋转（未改动：$skipReason）")
-            }
+        val result = if (restoreSystem) ScreenRotationRestore.restore(context) else {
+            AppPrefs.setTakeoverActive(false)
+            RotationRestoreResult.UNCHANGED
         }
-        AppPrefs.setTakeoverActive(false)
+        if (!quiet || result == RotationRestoreResult.DEFERRED || result == RotationRestoreResult.FAILED) {
+            event(when (result) {
+                RotationRestoreResult.DEFERRED -> "接管恢复暂缓：当前不是接管的屏幕，不改另一块屏的旋转锁定"
+                RotationRestoreResult.UNCHANGED -> "交还系统旋转：保持用户当前设置"
+                RotationRestoreResult.RESTORED -> "交还系统旋转：仅恢复接管屏幕的原设置"
+                RotationRestoreResult.FAILED -> "接管恢复失败：保留记录，下次在原屏重试"
+            })
+        }
         lastAppliedRot = -1
         _ui.update { it.copy(takeoverOn = false) }
     }
 
     private fun recoverOrphanTakeover() {
         if (!AppPrefs.isTakeoverActive()) return
-        val target = AppPrefs.restoreTarget()
-        val cur = readAutoRotate()
-
-        val weOwe = target != AppPrefs.AUTO_ROTATE_UNTOUCHED
-        if (cur == 0 && weOwe) {
-            runCatching {
-                Settings.System.putInt(
-                    context.contentResolver, Settings.System.ACCELEROMETER_ROTATION, target,
-                )
+        when (ScreenRotationRestore.restore(context)) {
+            RotationRestoreResult.RESTORED -> {
+                Recovery.fixed = true
+                event("上次接管未正常退出：已在原屏恢复旋转锁定")
             }
-            Recovery.fixed = true
-            event(
-                "⚠️ 上次没有正常退出，系统自动旋转被留在锁定状态 → 已恢复为" +
-                    (if (target == 0) "锁定" else "自动旋转开启"),
-            )
+            RotationRestoreResult.DEFERRED -> event("上次接管记录属于另一块屏：等待回到原屏再处理")
+            RotationRestoreResult.FAILED -> event("上次接管恢复失败：保留记录以便重试")
+            RotationRestoreResult.UNCHANGED -> Unit
         }
-        AppPrefs.setTakeoverActive(false)
     }
 
     private fun displayRotation(): Int {
@@ -746,7 +725,10 @@ class RotationEngine(
         val granted = Settings.System.canWrite(context)
         _ui.update { it.copy(writeSettingsGranted = granted) }
         if (!granted) return
-        val auto = readAutoRotate()
+        val form = ScreenRotationRestore.currentForm(context) ?: return
+        if (form != ScreenForm.INNER || form != AppPrefs.screenForm.value) return
+        if (AppPrefs.isTakeoverActive() && AppPrefs.takeoverForm() != form) return
+        val auto = readAutoRotate() ?: return
         if (_ui.value.takeoverOn && auto == 0) return
         if (auto != 0) {
             // USER_ROTATION may still contain portrait while the system displays landscape.
@@ -758,8 +740,7 @@ class RotationEngine(
                     return
                 }
             val locked = preserveRotationForTakeover(auto, visible, ::putPanelRotation) {
-                AppPrefs.setRestoreTarget(auto)
-                AppPrefs.setTakeoverActive(true)
+                if (!AppPrefs.beginTakeover(form, auto)) return@preserveRotationForTakeover false
                 runCatching {
                     Settings.System.putInt(context.contentResolver, Settings.System.ACCELEROMETER_ROTATION, 0)
                 }.getOrDefault(false)
@@ -771,8 +752,7 @@ class RotationEngine(
             }
             event("接管旋转：保留系统当前方向 ${rotName(visible)}")
         } else if (!AppPrefs.isTakeoverActive()) {
-            AppPrefs.setRestoreTarget(AppPrefs.AUTO_ROTATE_UNTOUCHED)
-            AppPrefs.setTakeoverActive(true)
+            if (!AppPrefs.beginTakeover(form, AppPrefs.AUTO_ROTATE_UNTOUCHED)) return
         }
         _ui.update { it.copy(takeoverOn = true) }
     }

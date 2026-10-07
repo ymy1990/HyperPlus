@@ -519,9 +519,20 @@ object AppPrefs {
         return byRoot
     }
 
-    fun setRestoreTarget(v: Int) {
-        val c = ctx ?: return
-        PrefsBridge.writeString(c.contentResolver, PrefsBridge.full(PrefsBridge.RESTORE), v.toString())
+    /** Persist ownership before changing the system lock. */
+    fun beginTakeover(form: ScreenForm, restore: Int): Boolean {
+        val cr = ctx?.contentResolver ?: return false
+        if (!PrefsBridge.writeString(cr, PrefsBridge.full(PrefsBridge.RESTORE), restore.toString())) return false
+        if (!PrefsBridge.writeString(cr, PrefsBridge.full(PrefsBridge.TAKEOVER_FORM), form.name)) return false
+        return setTakeoverActive(true)
+    }
+
+    fun takeoverForm(): ScreenForm {
+        val raw = ctx?.contentResolver?.let {
+            PrefsBridge.readString(it, PrefsBridge.full(PrefsBridge.TAKEOVER_FORM))
+        }
+        // Older versions only took over the inner screen; never restore their debt on outer.
+        return runCatching { ScreenForm.valueOf(raw.orEmpty()) }.getOrDefault(ScreenForm.INNER)
     }
 
     fun restoreTarget(): Int {
@@ -530,9 +541,9 @@ object AppPrefs {
             ?.toIntOrNull() ?: AUTO_ROTATE_UNTOUCHED
     }
 
-    fun setTakeoverActive(active: Boolean) {
-        val c = ctx ?: return
-        PrefsBridge.writeString(
+    fun setTakeoverActive(active: Boolean): Boolean {
+        val c = ctx ?: return false
+        return PrefsBridge.writeString(
             c.contentResolver,
             PrefsBridge.full(PrefsBridge.TAKEOVER),
             if (active) "1" else "0",

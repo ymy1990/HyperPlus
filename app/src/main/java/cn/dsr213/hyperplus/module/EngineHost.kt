@@ -8,6 +8,7 @@ import android.os.SystemClock
 import android.provider.Settings
 import android.util.Log
 import cn.dsr213.hyperplus.RotationEngine
+import cn.dsr213.hyperplus.ScreenRotationRestore
 import cn.dsr213.hyperplus.AppPrefs
 import cn.dsr213.hyperplus.BOOT_BREAKER_THRESHOLD
 import cn.dsr213.hyperplus.BOOT_HEALTHY_WINDOW_MS
@@ -126,30 +127,12 @@ internal object EngineHost {
     private fun panic(hostCtx: Context, why: String, e: Throwable?, publishFailure: Boolean = false) {
         if (dead) return
         dead = true
-        Log.e(TAG, "⚠️ 引擎停用（$why）—— 已还原系统自动旋转，按钮旋转已停用", e)
+        Log.e(TAG, "⚠️ 引擎停用（$why）—— 按钮旋转已停用；旋转锁定仅在原接管屏恢复", e)
 
         runCatching { engine?.stop() }
         engine = null
 
-        runCatching {
-            if (AppPrefs.isTakeoverActive()) {
-
-                val target = AppPrefs.restoreTarget()
-                val cur = Settings.System.getInt(
-                    hostCtx.contentResolver,
-                    Settings.System.ACCELEROMETER_ROTATION,
-                    1,
-                )
-                if (cur == 0 && target != AppPrefs.AUTO_ROTATE_UNTOUCHED) {
-                    Settings.System.putInt(
-                        hostCtx.contentResolver,
-                        Settings.System.ACCELEROMETER_ROTATION,
-                        target,
-                    )
-                }
-                AppPrefs.setTakeoverActive(false)
-            }
-        }
+        runCatching { ScreenRotationRestore.restore(hostCtx) }
 
         if (publishFailure) {
             val msg = "v1|phase=failed|err=" + (e?.javaClass?.simpleName ?: why)

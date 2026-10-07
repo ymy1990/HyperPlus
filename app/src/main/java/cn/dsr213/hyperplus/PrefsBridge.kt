@@ -38,6 +38,8 @@ internal object PrefsBridge {
 
     const val TAKEOVER = "takeover_active"
 
+    const val TAKEOVER_FORM = "takeover_screen_form"
+
     val BOOT_ATTEMPTS = PREFIX + "boot_attempts"
 
     val MIRROR = PREFIX + "config_mirror"
